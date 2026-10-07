@@ -1,20 +1,32 @@
 name: Build Cheat
+
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Prepare files
+        run: |
+          mkdir -p jni
+          cp cheat.cpp jni/
+          cp Android.mk jni/
+          cp Application.mk jni/
+      
       - name: Setup NDK
         uses: nttld/setup-ndk@v1
         with:
           ndk-version: r25b
+      
       - name: Build
         run: ndk-build
-      - name: Upload
+      
+      - name: Upload .so
         uses: actions/upload-artifact@v3
         with:
           name: libcheat
