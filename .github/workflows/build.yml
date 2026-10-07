@@ -1,0 +1,21 @@
+name: Build Cheat
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup NDK
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r25b
+      - name: Build
+        run: ndk-build
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: libcheat
+          path: libs/arm64-v8a/libcheat.so
